@@ -3,15 +3,13 @@ import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
 import { AuthForgetDTO } from './dto/auth-forget.dto';
 import { AuthResetDTO } from './dto/auth-reset.dto';
-import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { AuthMeDTO } from './dto/auth-me';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
+
   @Post('login')
   async login(@Body() { email, password }: AuthLoginDTO) {
     return this.authService.login(email, password);
@@ -19,7 +17,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: AuthRegisterDTO) {
-    return this.userService.create(body);
+    return this.authService.register(body);
   }
 
   @Post('forget')
@@ -30,5 +28,10 @@ export class AuthController {
   @Post('reset')
   async reset(@Body() { password, token }: AuthResetDTO) {
     return this.authService.reset(password, token);
+  }
+
+  @Post('me')
+  async me(@Body() body: AuthMeDTO) {
+    return this.authService.checkToken(body.token);
   }
 }
