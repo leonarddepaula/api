@@ -20,7 +20,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async createToken(user: User) {
+  createToken(user: User) {
     return {
       acessToken: this.jwtService.sign(
         {
@@ -39,11 +39,11 @@ export class AuthService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async checkToken(token: string) {
+  checkToken(token: string) {
     try {
       const data = this.jwtService.verify(token, {
-        audience: this.audience,
         issuer: this.issuer,
+        audience: this.audience,
       });
       return data;
     } catch (e) {
@@ -51,7 +51,7 @@ export class AuthService {
     }
   }
 
-  async isValidTocken(token: string) {
+  isValidTocken(token: string) {
     try {
       this.checkToken(token);
       return true;
